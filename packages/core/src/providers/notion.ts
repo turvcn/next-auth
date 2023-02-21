@@ -82,7 +82,7 @@ const NOTION_API_VERSION = "2022-06-28"
  * ---
  *
  * ## Notes
- * You need to select "Public Integration" on the configuration page to get an `oauth_id` and `oauth_secret`. Private integrations do not provide these details. 
+ * You need to select "Public Integration" on the configuration page to get an `oauth_id` and `oauth_secret`. Private integrations do not provide these details.
  * You must provide a `clientId` and `clientSecret` to use this provider, as-well as a redirect URI (due to this being required by Notion endpoint to fetch tokens).
  *
  * :::tip
@@ -153,14 +153,7 @@ export default function NotionProvider<P extends NotionProfile>(
         image: profile.avatar_url,
       }
     },
-    style: {
-      logo: "/notion.svg",
-      logoDark: "/notion.svg",
-      bg: "#fff",
-      text: "#000",
-      bgDark: "#fff",
-      textDark: "#000",
-    },
+    style: { logo: "/notion.svg", bg: "#fff", text: "#000" },
     options,
   }
 }

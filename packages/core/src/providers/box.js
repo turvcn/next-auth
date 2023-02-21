@@ -15,14 +15,7 @@ export default function Box(options) {
         image: profile.avatar_url,
       }
     },
-    style: {
-      logo: "/box.svg",
-      logoDark: "/box-dark.svg",
-      bg: "#fff",
-      text: "#0075C9",
-      bgDark: "#0075C9",
-      textDark: "#fff",
-    },
+    style: { logo: "/box-dark.svg", bg: "#0075C9", text: "#fff" },
     options,
   }
 }

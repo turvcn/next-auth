@@ -25,14 +25,7 @@ export default function Foursquare(options) {
           : null,
       }
     },
-    style: {
-      logo: "/foursquare.svg",
-      logoDark: "/foursquare-dark.svg",
-      bg: "#fff",
-      text: "#000",
-      bgDark: "#000",
-      textDark: "#fff",
-    },
+    style: { logo: "/foursquare-dark.svg", bg: "#000", text: "#fff" },
     options,
   }
 }

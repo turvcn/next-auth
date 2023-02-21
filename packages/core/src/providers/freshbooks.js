@@ -15,14 +15,7 @@ export default function Freshbooks(options) {
         image: null,
       }
     },
-    style: {
-      logo: "/freshbooks.svg",
-      logoDark: "/freshbooks-dark.svg",
-      bg: "#fff",
-      text: "#0075dd",
-      bgDark: "#0075dd",
-      textDark: "#fff",
-    },
+    style: { logo: "/freshbooks-dark.svg", bg: "#0075dd", text: "#fff" },
     ...options,
   }
 }
