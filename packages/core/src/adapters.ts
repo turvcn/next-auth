@@ -137,6 +137,8 @@ export interface AdapterUser extends User {
    * It is `null` if the user has not signed in with the Email provider yet, or the date of the first successful signin.
    */
   emailVerified: Date | null
+  /** The user's identifier - could be a phone number or an email. */
+  identifier: string
 }
 
 /**
@@ -219,6 +221,7 @@ export interface Adapter {
   createUser?(user: Omit<AdapterUser, "id">): Awaitable<AdapterUser>
   getUser?(id: string): Awaitable<AdapterUser | null>
   getUserByEmail?(email: string): Awaitable<AdapterUser | null>
+  getUserByIdentifier?(identifier: string): Awaitable<AdapterUser | null>
   /** Using the provider id and the id of the user for a specific account, get the user. */
   getUserByAccount?(
     providerAccountId: Pick<AdapterAccount, "provider" | "providerAccountId">

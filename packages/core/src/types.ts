@@ -64,7 +64,7 @@ import type { Adapter, AdapterUser } from "./adapters.js"
 import type {
   CredentialInput,
   CredentialsConfig,
-  EmailConfig,
+  EmailConfigInternal,
   OAuthConfigInternal,
   ProviderType,
 } from "./providers/index.js"
@@ -72,6 +72,7 @@ import type { JWT, JWTOptions } from "./jwt.js"
 import type { Cookie } from "./lib/cookie.js"
 import type { LoggerInstance } from "./lib/utils/logger.js"
 import { AuthConfig } from "./index.js"
+import { TokenConfig } from "./providers/token.js"
 
 export type { AuthConfig } from "./index.js"
 export type Awaitable<T> = T | PromiseLike<T>
@@ -373,9 +374,11 @@ export interface User {
 export type InternalProvider<T = ProviderType> = (T extends "oauth"
   ? OAuthConfigInternal<any>
   : T extends "email"
-  ? EmailConfig
+  ? EmailConfigInternal
   : T extends "credentials"
   ? CredentialsConfig
+  : T extends "token"
+  ? TokenConfig
   : never) & {
   signinUrl: string
   callbackUrl: string

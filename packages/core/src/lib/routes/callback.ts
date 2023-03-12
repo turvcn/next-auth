@@ -4,7 +4,7 @@ import { handleOAuth } from "../oauth/callback.js"
 import { createHash } from "../web.js"
 import { handleAuthorized } from "./shared.js"
 
-import type { AdapterSession } from "../../adapters.js"
+import type { AdapterSession, AdapterUser } from "../../adapters.js"
 import type {
   RequestInternal,
   ResponseInternal,
@@ -155,14 +155,14 @@ export async function callback(params: {
       }
 
       return { redirect: callbackUrl, cookies }
-    } else if (provider.type === "email") {
+    } else if (provider.type === "token" || provider.type === "email") {
       const token = query?.token as string | undefined
       const identifier = query?.email as string | undefined
 
       if (!token || !identifier) {
         const e = new TypeError(
-          "Missing token or email. The sign-in URL was manually opened without token/identifier or the link was not sent correctly in the email.",
-          { cause: { hasToken: !!token, hasEmail: !!identifier } }
+          "Missing token or identifier. The sign-in URL was manually opened without token/identifier or the link was not sent correctly in the identifier.",
+          { cause: { hasToken: !!token, hasIdentifier: !!identifier } }
         )
         e.name = "Configuration"
         throw e
@@ -180,16 +180,26 @@ export async function callback(params: {
       const invalidInvite = !hasInvite || expired
       if (invalidInvite) throw new Verification({ hasInvite, expired })
 
-      const user = (await adapter!.getUserByEmail(identifier)) ?? {
-        id: identifier,
-        email: identifier,
-        emailVerified: null,
+      let user: AdapterUser
+      if (provider.type === "email") {
+        user = (await adapter!.getUserByEmail(identifier)) ?? {
+          id: identifier,
+          email: identifier,
+          identifier,
+          emailVerified: null,
+        }
+      } else {
+        // @ts-expect-error
+        user = (await adapter!.getUserByIdentifier(identifier)) ?? {
+          id: identifier,
+          identifier,
+        }
       }
 
       const account: Account = {
-        providerAccountId: user.email,
+        providerAccountId: user.identifier,
         userId: user.id,
-        type: "email" as const,
+        type: provider.type,
         provider: provider.id,
       }
 

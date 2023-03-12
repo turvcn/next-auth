@@ -25,8 +25,7 @@ export async function signin(
     if (provider.type === "oauth" || provider.type === "oidc") {
       return await getAuthorizationUrl(query, options)
     } else if (provider.type === "email") {
-      const normalizer = provider.normalizeIdentifier ?? defaultNormalizer
-      const email = normalizer(body?.email)
+      const email = provider.normalizeIdentifier(body?.email)
 
       const user = (await options.adapter!.getUserByEmail(email)) ?? {
         id: email,
@@ -59,15 +58,4 @@ export async function signin(
     url.pathname += "/error"
     return { redirect: url.toString() }
   }
-}
-
-function defaultNormalizer(email?: string) {
-  if (!email) throw new Error("Missing email from request body.")
-  // Get the first two elements only,
-  // separated by `@` from user input.
-  let [local, domain] = email.toLowerCase().trim().split("@")
-  // The part before "@" can contain a ","
-  // but we remove it on the domain part
-  domain = domain.split(",")[0]
-  return `${local}@${domain}`
 }

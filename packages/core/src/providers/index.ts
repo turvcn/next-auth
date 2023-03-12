@@ -5,13 +5,14 @@ import type {
   CredentialsProviderType,
 } from "./credentials.js"
 import type EmailProvider from "./email.js"
-import type { EmailConfig, EmailProviderType } from "./email.js"
+import type { EmailConfig } from "./email.js"
 import type {
   OAuth2Config,
   OAuthConfig,
   OAuthProviderType,
   OIDCConfig,
 } from "./oauth.js"
+import type { TokenConfig, TokenProviderType } from "./token.js"
 
 export * from "./credentials.js"
 export * from "./email.js"
@@ -25,7 +26,7 @@ export * from "./oauth.js"
  * @see [Email or Passwordless Authentication](https://authjs.dev/concepts/oauth)
  * @see [Credentials-based Authentication](https://authjs.dev/concepts/credentials)
  */
-export type ProviderType = "oidc" | "oauth" | "email" | "credentials"
+export type ProviderType = "oidc" | "oauth" | "email" | "token" | "credentials"
 
 /** Shared across all {@link ProviderType} */
 export interface CommonProviderOptions {
@@ -61,6 +62,7 @@ export type Provider<P extends Profile = Profile> = (
   | OAuth2Config<P>
   | EmailConfig
   | CredentialsConfig
+  | TokenConfig
 ) & {
   /**
    * Used to deep merge user-provided config with the default config
@@ -74,7 +76,7 @@ export type BuiltInProviders = Record<
   (config: Partial<OAuthConfig<any>>) => OAuthConfig<any>
 > &
   Record<CredentialsProviderType, typeof CredentialsProvider> &
-  Record<EmailProviderType, typeof EmailProvider>
+  Record<TokenProviderType, typeof EmailProvider>
 
 export type AppProviders = Array<
   Provider | ReturnType<BuiltInProviders[keyof BuiltInProviders]>
